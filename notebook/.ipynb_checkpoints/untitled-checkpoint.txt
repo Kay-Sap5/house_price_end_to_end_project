@@ -1,0 +1,4 @@
+[crime_rate , room_num , teachers , poor_prop , n_hot_rooms , parks] ======> these has Outliers.
+
+
+[waterbody] has missing values

@@ -1,0 +1,15 @@
+Metadata-Version: 2.4
+Name: House_Price_App
+Version: 0.0.1
+Summary: Predicting house price
+Author: Kay Sap
+Author-email: tboy4198@gmail.com
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: scikit-learn
+Requires-Dist: Flask
+Requires-Dist: xgboost
+Dynamic: author
+Dynamic: author-email
+Dynamic: requires-dist
+Dynamic: summary
