@@ -8,6 +8,8 @@ from src.exception import CustomExpection
 from dataclasses import dataclass
 from sklearn.model_selection import train_test_split
 
+from src.components.data_transformation import DataTransformation
+
 @dataclass
 class DataIngestionConfig:
     train_data_path:str = os.path.join('artifacts','train.csv')
@@ -28,7 +30,7 @@ class DataIngestion:
 
             df.to_csv(self.data_ingestion_config.raw_data_path,index=False,header=True)
 
-            train_set , test_set = train_test_split(df , test_size=0.2 , random_state=32)
+            train_set , test_set = train_test_split(df , test_size=0.2 , random_state=40)
 
             train_set.to_csv(self.data_ingestion_config.train_data_path,index=False,header=True)
             test_set.to_csv(self.data_ingestion_config.test_data_path,index=False,header=True)
@@ -45,7 +47,11 @@ class DataIngestion:
 if __name__ == "__main__":
     try:
         data_ingestion = DataIngestion()
-        data_ingestion.initiate_data_ingestion()
+        train_path , test_path = data_ingestion.initiate_data_ingestion()
+
+        data_transformation = DataTransformation()
+        data_transformation.initiate_data_transformation(train_path,test_path)
+
     except Exception as e:
         raise CustomExpection(e,sys)
 
