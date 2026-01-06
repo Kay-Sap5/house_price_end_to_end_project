@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from sklearn.model_selection import train_test_split
 
 from src.components.data_transformation import DataTransformation
+from src.components.model_trainer import ModelTraning
 
 @dataclass
 class DataIngestionConfig:
@@ -50,7 +51,11 @@ if __name__ == "__main__":
         train_path , test_path = data_ingestion.initiate_data_ingestion()
 
         data_transformation = DataTransformation()
-        data_transformation.initiate_data_transformation(train_path,test_path)
+        train_arr , test_arr = data_transformation.initiate_data_transformation(train_path,test_path)
+
+        model_training = ModelTraning()
+        best_model = model_training.initiate_model_training(train_arr,test_arr)
+        print(best_model)
 
     except Exception as e:
         raise CustomExpection(e,sys)
