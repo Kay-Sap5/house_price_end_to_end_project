@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Data Input</title>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(to right, #fa709a 0%, #fee140 100%);
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --input-bg: #f3f4f6;
+            --text-color: #2d3748;
+            --label-color: #4a5568;
+            --border-radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-image: var(--primary-gradient);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--text-color);
+        }
+
+        .container {
+            background: var(--glass-bg);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 800px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        p.subtitle {
+            color: #718096;
+            font-size: 0.95rem;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 600px) {
+            form {
+                grid-template-columns: 1fr 1fr;
+            }
+            .full-width {
+                grid-column: span 2;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--label-color);
+            transition: color 0.3s;
+        }
+
+        input, select {
+            padding: 12px 16px;
+            border: 2px solid transparent;
+            background-color: var(--input-bg);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+            color: var(--text-color);
+        }
+
+        input:focus, select:focus {
+            background-color: #fff;
+            border-color: #764ba2;
+            box-shadow: 0 0 0 4px rgba(118, 75, 162, 0.1);
+        }
+
+        input:hover, select:hover {
+            background-color: #e2e8f0;
+        }
+
+        /* Styling the range input as a number for precision, 
+           but adding a visual hint class if needed later */
+        
+        button {
+            grid-column: 1 / -1;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(118, 75, 162, 0.3);
+            background: var(--secondary-gradient);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* Decorative Section Titles */
+        .section-title {
+            grid-column: 1 / -1;
+            font-size: 1.1rem;
+            color: #764ba2;
+            margin-top: 10px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 5px;
+            margin-bottom: 5px;
+        }
+
+        /* Custom Select Arrow */
+        .select-wrapper {
+            position: relative;
+        }
+        
+        .select-wrapper::after {
+            content: '▼';
+            font-size: 0.8rem;
+            color: #764ba2;
+            position: absolute;
+            right: 15px;
+            top: 40px; /* Adjust based on label height */
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Property Assessment</h1>
+        <p class="subtitle">Enter the area parameters to analyze the property value.</p>
+    </header>
+
+    <form action="{{url_for('predict_data_point')}}" method="POST">
+        
+        <!-- Section 1: Demographics & Security -->
+        <div class="section-title">Demographics & Environment</div>
+
+        <div class="form-group">
+            <label for="crime_rate">Crime Rate (per capita)</label>
+            <input type="number" id="crime_rate" name="crime_rate" step="0.01" placeholder="e.g. 0.05" required>
+        </div>
+
+        <div class="form-group">
+            <label for="poor_prop">Lower Status Population (%)</label>
+            <input type="number" id="poor_prop" name="poor_prop" step="0.1" placeholder="e.g. 15.2" required>
+        </div>
+
+        <div class="form-group">
+            <label for="teachers">Teacher Ratio</label>
+            <input type="number" id="teachers" name="teachers" step="0.1" placeholder="Pupil-Teacher ratio" required>
+        </div>
+
+        <div class="form-group">
+            <label for="air_qual">Air Quality (NOx conc.)</label>
+            <input type="number" id="air_qual" name="air_qual" step="0.001" placeholder="0.0 to 1.0" required>
+        </div>
+
+        <!-- Section 2: Property Specifics -->
+        <div class="section-title">Property Details</div>
+
+        <div class="form-group">
+            <label for="room_num">Average Rooms</label>
+            <input type="number" id="room_num" name="room_num" step="0.1" placeholder="e.g. 6.5" required>
+        </div>
+
+        <div class="form-group">
+            <label for="age">House Age (Years)</label>
+            <input type="number" id="age" name="age" step="1" placeholder="e.g. 45" required>
+        </div>
+
+        <div class="form-group">
+            <label for="resid_area">Residential Area Size</label>
+            <input type="number" id="resid_area" name="resid_area" step="1" placeholder="Sq. footage/proportion" required>
+        </div>
+
+        <div class="form-group">
+            <label for="n_hos_beds">Hospital Beds (per 1k)</label>
+            <input type="number" id="n_hos_beds" name="n_hos_beds" step="0.1" placeholder="e.g. 5.4" required>
+        </div>
+
+        <div class="form-group">
+            <label for="n_hot_rooms">Hot Rooms / Suites</label>
+            <input type="number" id="n_hot_rooms" name="n_hot_rooms" step="1" placeholder="Count" required>
+        </div>
+
+        <!-- Section 3: Geographic & Amenities -->
+        <div class="section-title">Location & Amenities</div>
+
+        <div class="form-group">
+            <label for="airport">Near Airport?</label>
+            <select id="airport" name="airport" required>
+                <option value="" disabled selected>Select status</option>
+                <option value="YES">Yes</option>
+                <option value="NO">No</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="waterbody">Waterbody Proximity</label>
+            <select id="waterbody" name="waterbody" required>
+                <option value="" disabled selected>Select waterbody type</option>
+                <option value="None">None</option>
+                <option value="River">River</option>
+                <option value="Lake">Lake</option>
+                <option value="Lake and River">Lake and River</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="rainfall">Annual Rainfall (cm)</label>
+            <input type="number" id="rainfall" name="rainfall" step="1" placeholder="e.g. 23" required>
+        </div>
+
+        <div class="form-group">
+            <label for="parks">Park Proportion</label>
+            <input type="number" id="parks" name="parks" step="0.01" placeholder="e.g. 0.04" required>
+        </div>
+        <h2>The Price is {{result}}</h2>
+        <button type="submit">Submit Analysis</button>
+    </form>
+</div>
+
+</body>
+</html>

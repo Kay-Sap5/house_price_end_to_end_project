@@ -28,7 +28,9 @@ class ModelTraning:
             report = evaluate_model(x_train_arr , y_train_arr , x_test_arr , y_test_arr , models , params)
             max_r2 = max(list(report.values()))
             best_model = list(models.values())[list(report.values()).index(max_r2)]
+
             logging.info(f"Best Model [{best_model}] R2 Score [{max_r2}]")
+            
             save_object(self.model_traning_config.model_path , best_model)
             logging.info("Model Saved Successfully ...................")
             
